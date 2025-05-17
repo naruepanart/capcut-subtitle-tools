@@ -144,7 +144,11 @@ func readDraft(filename string) (DraftContent, error) {
 	if err != nil {
 		return DraftContent{}, fmt.Errorf("failed to open file: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			fmt.Printf("Failed to close file: %v\n", err)
+		}
+	}()
 
 	var content DraftContent
 	if err := json.NewDecoder(bufio.NewReader(file)).Decode(&content); err != nil {
@@ -195,8 +199,6 @@ func writeSubtitle(buffer *bytes.Buffer, index int, startTime int64, endTime int
 	buffer.WriteString(cleanText(content))
 	buffer.WriteString("\n\n")
 }
-
-
 
 func main() {
 	draft, err := readDraft("../json/subtitles-mod.json")
