@@ -201,7 +201,7 @@ func writeSubtitle(buffer *bytes.Buffer, index int, startTime int64, endTime int
 }
 
 func main() {
-	draft, err := readDraft("../json/subtitles-mod.json")
+	draft, err := readDraft("draft_content.json")
 	if err != nil {
 		fmt.Println("Error reading draft:", err)
 		return
@@ -210,7 +210,7 @@ func main() {
 	textMap := buildTextMap(draft.Materials.Texts)
 	subtitles := createSubtitles(draft.Tracks, textMap)
 
-	if err := os.WriteFile("subtitles-mod.srt", subtitles.Bytes(), 0644); err != nil {
+	if err := os.WriteFile("subtitles.srt", subtitles.Bytes(), 0644); err != nil {
 		fmt.Println("Error writing subtitles:", err)
 		return
 	}
